@@ -13,7 +13,7 @@ public interface CommentsMapper {
     int addComment(Comments comments);
 
     // 删除某新闻下的所有评论
-    int delCommentsByCNID(String N_id) ;
+    int delCommentsByCNID(String N_id);
 
     // 根据ID删除评论
     int deleteComment(String C_id);
