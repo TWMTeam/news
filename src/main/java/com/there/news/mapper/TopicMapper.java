@@ -7,14 +7,33 @@ import java.util.Map;
 
 public interface TopicMapper {
 
-    //添加新闻主题
-    int addTopic(String name);
-    //获取所有主题
-    List<Topic> getAllTopic();
-    //更新主题
-    int updateTopic(Map<String, String> topic);
-    //根据名字查找主题
-    Topic findTopicByName(String name);
-    //通过t_id删除主题
-    int deleteTopic(String tid);
+    /**
+     * @param name
+     * @return 新增主题
+     */
+    int insertTopic(String name);
+
+    /**
+     * @return 查询所有主题
+     */
+    List<Topic> selectAllTopic();
+
+    /**
+     * @param topic
+     * @return 修改主题返回数值
+     */
+    int updateTopic(Topic topic);
+
+    /**
+     *
+     * @param name
+     * @return 根据name查询主题
+     */
+    Topic selectTopicByName(String name);
+
+    /**
+     * @param tid
+     * @return 根据tid删除主题,返回数值
+     */
+    int deleteTopic(Integer tid);
 }

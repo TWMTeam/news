@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.there.news.mapper.TopicMapper">
+
+
+    <!-- 根据名字查找主题-->
+    <select id="selectTopicByName" parameterType="String" resultType="Topic">
+        select t_id,t_name from topics where t_name=#{t_name}
+    </select>
+
+    <!-- 获取所有主题-->
+    <select id="selectAllTopic" resultType="Topic">
+        select t_id,t_name from topics
+    </select>
+
+    <!-- 通过t_id删除主题-->
+    <delete id="deleteTopic">
+        delete from topics where t_id=#{t_id}
+    </delete>
+
+    <!-- 添加新闻主题-->
+    <insert id="insertTopic" parameterType="Topic">
+        insert into  topics(t_name) values (#{t_name})
+    </insert>
+
+    <!--更新主题-->
+    <update id="updateTopic">
+        update topics set t_name=#{t_name} where t_id=#{t_id}
+    </update>
+</mapper>
