@@ -1,0 +1,68 @@
+改变mysql远程访问权限
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'root' WITH GRANT OPTION;
+flush privileges;
+
+spring-mvc.xml中的配置
+    1.<!--扫描controller层的注解类,以下注解是为了扫描这个注解：@Controller-->
+      <context:component-scan base-package="com.there.news.controller"/>
+    2.在Junit测试时如果需要css/或js/资源不存在,将静态资源代码注释,再次运行
+
+spring-dao.xml中的配置
+    1.扫描需要mapper包中xxx.xml所在的全限定名
+        <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+                <!--注入会话工厂-->
+                <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+                <!-- 扫描mapper包下的接口,生成代理对象 -->
+                <property name="basePackage" value="com.there.news.mapper"/>
+                如果这里配置错误,在service层是无法注入mapper中的接口的,
+                如果配置都正确的情况下,还是无法自动mapper接口,在@Autowired后添加(required = false)
+         </bean>
+spring-service.xml中的配置
+    1.<!--扫描service层的注解类,以下注解是为了扫描这个注解：@Service-->
+       <context:component-scan base-package="com.there.news.service"/>
+       如果这里配置错误,在controller层是无法自动注入service中的接口
+    2.开启事务
+
+mybatis-config.xml中的配置
+    1.设置别名
+        <typeAliases>
+             <package name="com.there.news.entity"></package>
+        </typeAliases>
+    2.开启懒加载机制
+        <settings>
+             <!-- 懒加载 -->
+             <setting name="lazyLoadingEnabled" value="true" />
+        </settings>
+    最好不要开启驼峰命名
+
+entity类:需要实现Serializable接口,不要添加无参构造个toString方法
+
+
+mapper类:mapper.xml中的namespace是全限定名,并且select、update、delete、insert标签中的id与方法名对应
+         parameterType与参数类型对应  resultType与返回值类型对应
+         mapper的接口与service中的接口要以示区分(一般mapper中的查询用select,service中查询用find)
+
+service类:接口以实体类+Service命名,实现类以实体类+Service+Impl命名(需要自动注入实体类+Mapper(即接口))
+
+controller类:以实体类+Controller命名,需要自动注入实体类+Service(即接口)
+
+
+测试类:
+    1.以模块名命名包名以示区分
+    2.以模块名+Test建立测试类
+    3.需要自动注入Service接口,来测试dao层和Service层
+
+@RunWith(value= SpringJUnit4ClassRunner.class)
+@ContextConfiguration(value={"classpath:spring/spring-*.xml"})
+public class LoginTest {
+     @Autowired
+     UserService userService;
+     //查询所有的用户信息
+     @Test
+     public void test1() {
+        List<Users> allUser = userService.findUsersAll();
+        for (Users user : allUser) {
+            System.out.println(user.getU_id()+","+user.getU_username()+","+user.getU_email());
+        }
+      }
+}
